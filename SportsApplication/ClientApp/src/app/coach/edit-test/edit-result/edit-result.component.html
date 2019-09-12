@@ -1,4 +1,4 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="editResultForm" *ngIf="model">
+<form  [formGroup]="editResultForm" *ngIf="model">
   <div class="form-signin">
       <h2 class="form-signin-heading">CHANGE DATA FOR ATHELETE</h2>
       <div class="form-group">
@@ -37,5 +37,8 @@
           </span>
       </span>
   </div>
-  <button type="submit" class="btn btn-primary" >Save</button>
+  <button type="submit" (click)="onSubmit()" class="btn btn-primary" >Save</button>
+  <br/>
+  <br/>
+  <button type="submit" (click)="onDelete()" class="btn btn-danger" >Delete Athelete</button>
 </form>

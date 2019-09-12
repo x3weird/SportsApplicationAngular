@@ -23,7 +23,10 @@ export class EditResultComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.service.editResult(this.id).subscribe(
-      (data) => {this.model = data; this.getResultData()},
+      (data) => {
+                  this.model = data;
+                  this.getResultData();
+      },
       (error) => console.log(error)
     );
   }
@@ -49,13 +52,13 @@ export class EditResultComponent implements OnInit {
     );
   }
 
-  onDelete(Id, TestId) {
+  onDelete() {
     if (confirm("Are you sure you want to delete this test")) {
-      this.service.deleteResult(Id, TestId).subscribe(
-        (data) => this.router.navigate(['/login'])
+      this.service.deleteResult(this.model.id, this.model.testId).subscribe(
+        () => this.router.navigate(['/editTest/' + this.model.testId]),
+        (err) => console.log(err)
       );
     }
-
   }
 
 }
