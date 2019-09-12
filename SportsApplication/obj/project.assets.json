@@ -13060,11 +13060,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\arjunsinh\\Desktop\\complete\\SportsApplication\\SportsApplication\\SportsApplication.csproj",
+      "projectUniqueName": "C:\\Users\\arjunsinh\\Desktop\\SportsApplication n\\SportsApplication\\SportsApplication.csproj",
       "projectName": "SportsApplication",
-      "projectPath": "C:\\Users\\arjunsinh\\Desktop\\complete\\SportsApplication\\SportsApplication\\SportsApplication.csproj",
+      "projectPath": "C:\\Users\\arjunsinh\\Desktop\\SportsApplication n\\SportsApplication\\SportsApplication.csproj",
       "packagesPath": "C:\\Users\\arjunsinh\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\arjunsinh\\Desktop\\complete\\SportsApplication\\SportsApplication\\obj\\",
+      "outputPath": "C:\\Users\\arjunsinh\\Desktop\\SportsApplication n\\SportsApplication\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

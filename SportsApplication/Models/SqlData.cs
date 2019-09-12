@@ -17,7 +17,7 @@ namespace Sports_Application.Models
         private readonly SignInManager<ApplicationUser> signInManager;
 
         public SqlData(SportsApplicationDbContext db,
-                        UserManager<ApplicationUser> userManager, 
+                        UserManager<ApplicationUser> userManager,
                         RoleManager<IdentityRole> roleManager,
                         SignInManager<ApplicationUser> signInManager)
         {
@@ -27,55 +27,88 @@ namespace Sports_Application.Models
             this.signInManager = signInManager;
         }
 
-        public IEnumerable<Test> GetAllTestData()
+        public async Task<IEnumerable<Test>> GetAllTestData()
         {
-            return db.Tests.OrderByDescending(item=>item.Date).ToList();
+            return await db.Tests.OrderByDescending(item => item.Date).ToListAsync();
         }
 
-        public Test AddTest(Test test)
+        public async Task<Test> AddTest(Test test)
         {
-            db.Tests.Add(test);
+            await db.Tests.AddAsync(test);
             return test;
         }
 
-        public List<AtheleteNameWithData> GetAtheleteNamesWithDataByTestId(int id)
+        public async Task<List<AtheleteNameWithData>> GetAtheleteNamesWithDataByTestId(int id)
         {
             List<AtheleteNameWithData> li = new List<AtheleteNameWithData>();
-            var query = from r in db.Results
-                        where r.TestId.Equals(id)
-                        select r;
-            foreach (var result in query)
+            //var query = from r in db.Results
+            //            where r.TestId.Equals(id)
+            //            select r;
+
+            var query = db.Results.Where(r => r.TestId.Equals(id));
+            var query2 = await db.Tests.Where(t=>t.Id.Equals(id)).SingleOrDefaultAsync();
+            if(query2.TestType=="Cooper Test")
             {
-                foreach (var athelete in db.Users)
+                foreach (var result in query)
                 {
-                    if(result.UserId==athelete.Id)
+                    foreach (var athelete in db.Users)
                     {
-                        if(result.Data>3500)
-                            li.Add(new AtheleteNameWithData{Id=result.Id,Name=athelete.FirstName+" "+athelete.LastName, Data=result.Data, FitnessRanking="Very good"});
-                        if (result.Data > 2000 && result.Data < 3501)
-                            li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Good" });
-                        if (result.Data > 1000 && result.Data < 2001)
-                            li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Average" });
-                        if (result.Data<1001)
-                            li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Below Average" });
+                        if (result.UserId == athelete.Id)
+                        {
+                            if (result.Data > 3500)
+                                li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Very good" });
+                            if (result.Data > 2000 && result.Data < 3501)
+                                li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Good" });
+                            if (result.Data > 1000 && result.Data < 2001)
+                                li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Average" });
+                            if (result.Data < 1001)
+                                li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Below Average" });
+                        }
                     }
                 }
-            }
 
-            return li.OrderByDescending(item => item.Data).ToList();
+                return li.OrderByDescending(item => item.Data).ToList();
+            } else
+            {
+                foreach (var result in query)
+                {
+                    foreach (var athelete in db.Users)
+                    {
+                        if (result.UserId == athelete.Id)
+                        {
+                            if (result.Data > 350)
+                                li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Very good" });
+                            if (result.Data > 200 && result.Data < 351)
+                                li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Good" });
+                            if (result.Data > 100 && result.Data < 201)
+                                li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Average" });
+                            if (result.Data < 101)
+                                li.Add(new AtheleteNameWithData { Id = result.Id, Name = athelete.FirstName + " " + athelete.LastName, Data = result.Data, FitnessRanking = "Below Average" });
+                        }
+                    }
+                }
+
+                return li.OrderByDescending(item => item.Data).ToList();
+            }
         }
 
-        public void DeleteTestByTestid(int id)
+        public async Task DeleteTestByTestid(int id)
         {
-            var query = (from t in db.Tests
-                        where t.Id.Equals(id)
-                        select t).Single();
+            //var query = (from t in db.Tests
+            //            where t.Id.Equals(id)
+            //            select t).Single();
+
+            var query = await (db.Tests.Where(t => t.Id.Equals(id))).SingleAsync();
+
             db.Tests.Remove(query);
 
-            var query2 = from r in db.Results
-                        where r.TestId.Equals(id)
-                        select r;
-            if(query2!=null)
+            //var query2 = from r in db.Results
+            //            where r.TestId.Equals(id)
+            //            select r;
+
+            var query2 = db.Results.Where(r => r.TestId.Equals(id));
+
+            if (query2 != null)
             {
                 foreach (var item in query2)
                 {
@@ -83,12 +116,15 @@ namespace Sports_Application.Models
                 }
             }
         }
-        public int AddResult(Result result)
+        public async Task<int> AddResult(Result result)
         {
-            var query = from r in db.Results
-                        where r.TestId.Equals(result.TestId) && r.UserId.Equals(result.UserId)
-                        select r;
-            if (query.FirstOrDefault() == null)
+            //var query = from r in db.Results
+            //            where r.TestId.Equals(result.TestId) && r.UserId.Equals(result.UserId)
+            //            select r;
+
+            var query = db.Results.Where(r => r.TestId.Equals(result.TestId) && r.UserId.Equals(result.UserId));
+
+            if (await query.SingleOrDefaultAsync() == null)
             {
                 db.Results.Add(result);
                 return 1;
@@ -101,12 +137,15 @@ namespace Sports_Application.Models
 
         }
 
-        public Test GetTestByid(int id)
+        public async Task<Test> GetTestByid(int id)
         {
-            var query = from t in db.Tests
-                        where t.Id.Equals(id)
-                        select t;
-            return query.FirstOrDefault();
+            //var query = from t in db.Tests
+            //            where t.Id.Equals(id)
+            //            select t;
+
+            var query = db.Tests.Where(t => t.Id.Equals(id));
+
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<List<Athelete>> GetAllAtheleteList()
@@ -116,46 +155,59 @@ namespace Sports_Application.Models
             {
                 if (await userManager.IsInRoleAsync(user, "Athelete"))
                 {
-                    li.Add(new Athelete { id=user.Id, name = user.FirstName+" "+user.LastName });
+                    li.Add(new Athelete { id = user.Id, name = user.FirstName + " " + user.LastName });
                 }
             }
             return li;
         }
 
-        public void IncrementCountByTestId(int id)
+        public async Task IncrementCountByTestId(int id)
         {
-            var query = (from t in db.Tests
-                        where t.Id.Equals(id)
-                        select t).SingleOrDefault();
+            //var query = (from t in db.Tests
+            //            where t.Id.Equals(id)
+            //            select t).SingleOrDefault();
+
+            var query = await (db.Tests.Where(t => t.Id.Equals(id))).SingleOrDefaultAsync();
             query.Count++;
         }
 
-        public void DecrementCountByTestId(int id)
+        public async Task DecrementCountByTestId(int id)
         {
-            var query = (from t in db.Tests
-                         where t.Id.Equals(id)
-                         select t).SingleOrDefault();
+            //var query = (from t in db.Tests
+            //             where t.Id.Equals(id)
+            //             select t).SingleOrDefault();
+
+            var query = await (db.Tests.Where(t => t.Id.Equals(id))).SingleOrDefaultAsync();
+
             query.Count--;
         }
 
-        public Result GetResultById(int id)
+        public async Task<Result> GetResultById(int id)
         {
-            var query =  from r in db.Results
-                         where r.Id.Equals(id)
-                         select r;
-            return query.First();
+            //var query =  from r in db.Results
+            //             where r.Id.Equals(id)
+            //             select r;
+
+            var query = db.Results.Where(r => r.Id.Equals(id));
+
+            return await query.FirstAsync();
         }
 
-        public int Update(Result updatedResult)
+        public async Task<int> Update(Result updatedResult)
         {
-            var query2 = from r in db.Results
-                        where r.Id != updatedResult.Id && r.TestId.Equals(updatedResult.TestId) && r.UserId.Equals(updatedResult.UserId)
-                        select r;
-            if(query2.FirstOrDefault()==null)
+            //var query2 = from r in db.Results
+            //            where r.Id != updatedResult.Id && r.TestId.Equals(updatedResult.TestId) && r.UserId.Equals(updatedResult.UserId)
+            //            select r;
+
+            var query2 = db.Results.Where(r => r.Id != updatedResult.Id && r.TestId.Equals(updatedResult.TestId) && r.UserId.Equals(updatedResult.UserId));
+
+            if (await query2.FirstOrDefaultAsync() == null)
             {
-                var query = from r in db.Results
-                            where r.TestId.Equals(updatedResult.TestId) && r.UserId.Equals(updatedResult.UserId)
-                            select r;
+                //var query = from r in db.Results
+                //            where r.TestId.Equals(updatedResult.TestId) && r.UserId.Equals(updatedResult.UserId)
+                //            select r;
+
+                var query = db.Results.Where(r => r.TestId.Equals(updatedResult.TestId) && r.UserId.Equals(updatedResult.UserId));
                 var entity = db.Results.Attach(updatedResult);
                 entity.State = EntityState.Modified;
                 return 1;
@@ -164,39 +216,48 @@ namespace Sports_Application.Models
             {
                 return 0;
             }
-            
+
         }
 
 
-        public void DeleteTestResultById(int id)
+        public async Task DeleteTestResultById(int id)
         {
-            var query = (from t in db.Results
-                         where t.Id.Equals(id)
-                         select t).Single();
+            //var query = (from t in db.Results
+            //             where t.Id.Equals(id)
+            //             select t).Single();
+
+            var query = await (db.Results.Where(t => t.Id.Equals(id))).SingleAsync();
+
             db.Results.Remove(query);
         }
 
-        public List<AtheleteViewModel> GetAtheleteData(string Id)
+        public async Task<List<AtheleteViewModel>> GetAtheleteData(string Id)
         {
             List<AtheleteViewModel> li = new List<AtheleteViewModel>();
-            var query = from r in db.Results
-                        where r.UserId.Equals(Id)
-                        select r;
+            //var query = from r in db.Results
+            //            where r.UserId.Equals(Id)
+            //            select r;
+
+            var query = db.Results.Where(r => r.UserId.Equals(Id));
+
             foreach (var item in query)
             {
                 foreach (var item2 in db.Users)
                 {
-                    if(item2.Id==item.UserId)
+                    if (item2.Id == item.UserId)
                     {
-                        var query2 = (from t in db.Tests
-                                     where t.Id.Equals(item.TestId)
-                                     select t).Single();
+                        //var query2 = (from t in db.Tests
+                        //             where t.Id.Equals(item.TestId)
+                        //             select t).Single();
+
+                        var query2 = await (db.Tests.Where(t => t.Id.Equals(item.TestId))).SingleAsync();
+
                         li.Add(new AtheleteViewModel { CoachName = item2.UserName, TestName = query2.TestType, Date = query2.Date, Data = item.Data });
                     }
                 }
             }
             return li;
-            
+
         }
         public async Task<ApplicationUser> FindByEmailAsync(string email)
         {
@@ -244,7 +305,7 @@ namespace Sports_Application.Models
 
         public async Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string role)
         {
-            var result = await userManager.AddToRoleAsync(user, role); 
+            var result = await userManager.AddToRoleAsync(user, role);
             return result;
         }
 
@@ -282,9 +343,9 @@ namespace Sports_Application.Models
             return user;
         }
 
-        public IEnumerable<Test> GetTests(string Id)
+        public async Task<IEnumerable<Test>> GetTests(string Id)
         {
-            return db.Tests.Where(r => r.CoachId.Equals(Id));
+            return await db.Tests.Where(r => r.CoachId.Equals(Id)).ToListAsync();
         }
 
     }

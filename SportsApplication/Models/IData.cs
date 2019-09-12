@@ -10,19 +10,19 @@ namespace Sports_Application.Models
 {
     public interface IData
     {
-        IEnumerable<Test> GetAllTestData();
-        Test AddTest(Test Test);
-        List<AtheleteNameWithData> GetAtheleteNamesWithDataByTestId(int id);
-        void DeleteTestByTestid(int Id);
-        int AddResult(Result Result);
-        Test GetTestByid(int Id);
+        Task<IEnumerable<Test>> GetAllTestData();
+        Task<Test> AddTest(Test Test);
+        Task<List<AtheleteNameWithData>> GetAtheleteNamesWithDataByTestId(int id);
+        Task DeleteTestByTestid(int Id);
+        Task<int> AddResult(Result Result);
+        Task<Test> GetTestByid(int Id);
         Task<List<Athelete>> GetAllAtheleteList();
-        void IncrementCountByTestId(int Id);
-        void DecrementCountByTestId(int Id);
-        Result GetResultById(int Id);
-        int Update(Result updatedResult);
-        void DeleteTestResultById(int Id);
-        List<AtheleteViewModel> GetAtheleteData(string Id);
+        Task IncrementCountByTestId(int Id);
+        Task DecrementCountByTestId(int Id);
+        Task<Result> GetResultById(int Id);
+        Task<int> Update(Result updatedResult);
+        Task DeleteTestResultById(int Id);
+        Task<List<AtheleteViewModel>> GetAtheleteData(string Id);
         Task<ApplicationUser> FindByEmailAsync(string Email);
         Task<bool> RoleExistsAsync(string Role);
         Task<IdentityResult> CreateRoleAsync(IdentityRole identityRole);
@@ -38,6 +38,6 @@ namespace Sports_Application.Models
         Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string item);
         Task<IdentityResult> DeleteAsync(ApplicationUser user);
         Task<ApplicationUser> GetUserAsync(ClaimsPrincipal HttpContextUser);
-        IEnumerable<Test> GetTests(string Id);
+        Task<IEnumerable<Test>> GetTests(string Id);
     }
 }

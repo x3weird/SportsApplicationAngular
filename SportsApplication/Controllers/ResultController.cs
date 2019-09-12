@@ -22,16 +22,16 @@ namespace SportsApplication.Controllers
 
         [HttpGet("{TestId:int}")]
         [Route("editTest/{TestId}")]
-        public object ViewResult(int TestId)
+        public async Task<object> ViewResult(int TestId)
         {
 
-            var test = unitOfWork.Data.GetTestByid(TestId);
+            var test = await unitOfWork.Data.GetTestByid(TestId);
             ViewResultModel obj = new ViewResultModel
             {
                 Date = test.Date,
                 TestType = test.TestType,
                 TestId = TestId,
-                AtheleteNames = unitOfWork.Data.GetAtheleteNamesWithDataByTestId(TestId)
+                AtheleteNames = await unitOfWork.Data.GetAtheleteNamesWithDataByTestId(TestId)
             };
             return Ok(obj);
         }
@@ -61,7 +61,7 @@ namespace SportsApplication.Controllers
                 UserId = resultmodel.UserId
             };
             resultmodel.AtheleteList = await unitOfWork.Data.GetAllAtheleteList();
-            int status = unitOfWork.Data.AddResult(result);
+            int status = await unitOfWork.Data.AddResult(result);
             if(status==0)
             {
                  return Ok(new { status});
@@ -69,9 +69,8 @@ namespace SportsApplication.Controllers
             else
             {
 
-                unitOfWork.Data.IncrementCountByTestId(resultmodel.TestId);
+                await unitOfWork.Data.IncrementCountByTestId(resultmodel.TestId);
                 unitOfWork.Commit();
-                //"ViewResult", "Result", new { testid = resultmodel.TestId }
                 return Ok(new { status });
             }
             
@@ -81,8 +80,8 @@ namespace SportsApplication.Controllers
         [Route("editResult/{Id}")]
         public async Task<object> EditResult(int Id)
         {
-            var result = unitOfWork.Data.GetResultById(Id);
-            var atheletes = unitOfWork.Data.GetAtheleteNamesWithDataByTestId(result.TestId);
+            var result = await unitOfWork.Data.GetResultById(Id);
+            var atheletes = await unitOfWork.Data.GetAtheleteNamesWithDataByTestId(result.TestId);
             CreateResultModel ResultModel = new CreateResultModel
             {
                 TestId = result.TestId,
@@ -108,7 +107,7 @@ namespace SportsApplication.Controllers
                 UserId = resultmodel.UserId
             };
             
-            int status = unitOfWork.Data.Update(result);
+            int status = await unitOfWork.Data.Update(result);
             if (status == 0)
             {
                 ViewBag.message = "Athelete already exists";
@@ -123,17 +122,12 @@ namespace SportsApplication.Controllers
 
         [HttpDelete]
         [Route("deleteResult/{Id}/{TestId}")]
-        public Object DeleteResult(int Id,int TestId)
+        public async Task<Object> DeleteResult(int Id,int TestId)
         {
-            unitOfWork.Data.DeleteTestResultById(Id);
-            unitOfWork.Data.DecrementCountByTestId(TestId);
+            await unitOfWork.Data.DeleteTestResultById(Id);
+            await unitOfWork.Data.DecrementCountByTestId(TestId);
             unitOfWork.Commit();
             return Ok();
-        }
-        [Authorize(Roles = "Coach")]
-        public IActionResult ConfirmDeleteResult(int Id)
-        {
-            return View(unitOfWork.Data.GetResultById(Id));
         }
     }
 }

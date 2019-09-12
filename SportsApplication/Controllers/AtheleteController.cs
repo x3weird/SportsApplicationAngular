@@ -21,18 +21,16 @@ namespace SportsApplication.Controllers
             this.unitOfWork = unitOfWork;
         }
 
-        [Authorize]
         [HttpGet("{Id}")]
         [Route("atheleteData/{Id}")]
-        public object Index(string Id)
+        public async Task<object> Index(string Id)
         {
-            List<AtheleteViewModel> li= unitOfWork.Data.GetAtheleteData(Id);
+            List<AtheleteViewModel> li= await unitOfWork.Data.GetAtheleteData(Id);
             return Ok(li);
         }
         
         [HttpGet]
         [Route("AtheleteList")]
-        [Authorize]
         public async Task<object> AtheleteList()
         {
             var users = await unitOfWork.Data.GetUsersInRoleAsync("Athelete");
@@ -41,7 +39,6 @@ namespace SportsApplication.Controllers
 
         [Authorize]
         [HttpDelete("{Id}")]
-        //[Route("deleteAthelete")]
         public async Task<object> DeleteAthelete(string Id)
         {
             var user = await unitOfWork.Data.FindByIdAsync(Id);
@@ -60,7 +57,6 @@ namespace SportsApplication.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [Route("addNewAthelete")]
         public async Task<Object> AddAthelete(RegisterViewModel model)
         {

@@ -25,27 +25,10 @@ namespace SportsApplication.Controllers
 
         [HttpGet]
         [Route("TestData")]
-        public IEnumerable<Test> TestData()
+        public async Task<IEnumerable<Test>> TestData()
         {
-            var Tests = unitOfWork.Data.GetAllTestData();
+            var Tests = await unitOfWork.Data.GetAllTestData();
             return Tests;
-            //var user = await unitOfWork.Data.GetUserAsync(HttpContext.User);
-            //bool isCoach = await unitOfWork.Data.IsInRoleAsync(user, "Coach");
-            //if (isCoach)
-            //{
-            //    return View(unitOfWork.Data.GetTests(user.Id));
-            //}
-            //else
-            //{
-            //    return RedirectToAction("Index", "Athelete", user.Id);
-            //}
-            
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

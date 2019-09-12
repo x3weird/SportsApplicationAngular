@@ -6,7 +6,12 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Distace<br />(meter)</th>
+            <ng-container *ngIf="obj.testType=='Cooper Test'">
+              <th>Distace<br />(meter)</th>
+            </ng-container>
+            <ng-container *ngIf="obj.testType=='Sprint Test'">
+              <th>Time<br />(second)</th>
+            </ng-container>
             <th>Fitness<br />Rating</th>
         </tr>
     </thead>

@@ -92,19 +92,6 @@ namespace SportsApplication.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Login()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-
-                return RedirectToAction("Index", "Home");
-
-            }
-            return View();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         [Route("Login")]
