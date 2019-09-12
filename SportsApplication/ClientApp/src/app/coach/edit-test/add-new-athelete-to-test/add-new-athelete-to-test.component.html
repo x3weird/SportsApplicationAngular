@@ -1,0 +1,41 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="addAtheleteForm">
+  <div class="form-signin">
+      <h2 class="form-signin-heading">ADD NEW ATHELETE TO TEST</h2>
+      <div class="form-group">
+          <label class="control-label" for="Name">Test Type</label>
+          <select class="form-control" id="Name" formControlName="Name"
+          [ngClass]="{
+            'is-invalid':
+                  (addAtheleteForm.get('Name').touched ||
+                  addAtheleteForm.get('Name').dirty) &&
+                  !addAtheleteForm.get('Name').valid
+          }">
+              <option  selected disabled value="-1">Choose</option>
+              <ng-container *ngFor="let item of model?.atheleteList">
+                  <option value={{item.id}}>{{item.name}}</option>
+              </ng-container>
+          </select>
+          <span class="invalid-feedback">
+              <span *ngIf="addAtheleteForm.get('Name').errors?.required">
+                Please select Name.
+              </span>
+          </span>
+      </div>
+  </div>
+  <div class="form-group">
+      <label for="Data">Data</label>
+      <input type="number" class="form-control" id="number" formControlName="Data"
+      [ngClass]="{
+        'is-invalid':
+              (addAtheleteForm.get('Data').touched ||
+              addAtheleteForm.get('Data').dirty) &&
+              !addAtheleteForm.get('Data').valid
+      }" />
+      <span class="invalid-feedback">
+          <span *ngIf="addAtheleteForm.get('Data').errors?.required">
+            Please enter Data.
+          </span>
+      </span>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="!addAtheleteForm.valid" >Add Athelete</button>
+</form>

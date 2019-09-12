@@ -1,0 +1,28 @@
+
+
+<h1>{{obj?.testType}} Dt.{{obj?.date | date:"dd-MM-yyyy"}}</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Distace<br />(meter)</th>
+            <th>Fitness<br />Rating</th>
+        </tr>
+    </thead>
+    <tbody>
+
+            <tr *ngFor="let athelete of obj?.atheleteNames; index as i">
+                <td><a [routerLink]="['/editResult/'+athelete.id]">{{i+1}}. {{athelete.name}}</a></td>
+                <td>{{athelete.data}}</td>
+                <td>{{athelete.fitnessRanking}}</td>
+            </tr>
+
+    </tbody>
+</table>
+
+
+<button class="btn btn-primary" [routerLink]="['/addNewAtheleteToTest/'+obj?.testId]">Add New Athelete To Test</button>
+<br/>
+<br />
+<button class="btn btn-danger" (click)="onDelete(obj?.testId)">Delete Test</button>

@@ -1,0 +1,41 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="editResultForm" *ngIf="model">
+  <div class="form-signin">
+      <h2 class="form-signin-heading">CHANGE DATA FOR ATHELETE</h2>
+      <div class="form-group">
+          <label class="control-label" for="Name">Test Type</label>
+          <select class="form-control" value={{model.userId}} id="Name" formControlName="Name"
+          [ngClass]="{
+            'is-invalid':
+                  (editResultForm.get('Name').touched ||
+                  editResultForm.get('Name').dirty) &&
+                  !editResultForm.get('Name').valid
+          }">
+              <option value="-1" selected disabled>Choose</option>
+              <ng-container *ngFor="let item of model.atheleteList">
+                  <option value={{item.id}}>{{item.name}}</option>
+              </ng-container>
+          </select>
+          <span class="invalid-feedback">
+              <span *ngIf="editResultForm.get('Name').errors?.required">
+                Please enter name.
+              </span>
+          </span>
+      </div>
+  </div>
+  <div class="form-group">
+      <label for="Data">Data</label>
+      <input type="number" class="form-control" id="Data" formControlName="Data" [value]="model.data"
+      [ngClass]="{
+        'is-invalid':
+              (editResultForm.get('Data').touched ||
+              editResultForm.get('Data').dirty) &&
+              !editResultForm.get('Data').valid
+      }" />
+      <span class="invalid-feedback">
+          <span *ngIf="editResultForm.get('Data').errors?.required">
+            Please enter Data.
+          </span>
+      </span>
+  </div>
+  <button type="submit" class="btn btn-primary" >Save</button>
+</form>

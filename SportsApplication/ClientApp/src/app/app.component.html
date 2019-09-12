@@ -1,0 +1,58 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SportsApplication</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" [routerLink]="['']">SportsApplication</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" [routerLink]="['/login']">Home</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto grow-1">
+
+                            <li class="nav-item">
+                                <form (ngSubmit)="onLogout()">
+                                    <button type="submit" style="width:auto"
+                                            class="nav-link btn btn-link py-0" *ngIf='service.checkLogin()'>
+                                        Log Out
+                                    </button>
+                                </form>
+
+                            </li>
+                                <li class="nav-item" *ngIf='!service.checkLogin()'>
+                                    <a class="nav-link text-dark" [routerLink]="['/register']">
+                                        Register
+                                    </a>
+                                </li>
+                                <li class="nav-item" *ngIf='!service.checkLogin()'>
+                                    <a class="nav-link text-dark" [routerLink]="['/login']">
+                                        Login
+                                    </a>
+                                </li>
+
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            {{check}}
+          <router-outlet></router-outlet>
+        </main>
+    </div>
+</body>
+</html>

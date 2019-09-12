@@ -1,0 +1,28 @@
+<div class="container">
+  <div>
+    <div >
+        <button type="button" class="btn btn-primary" [routerLink]="['/createTest']">Create New Test</button>
+        <button type="button" class="btn btn-primary" style="margin-left: 5px" [routerLink]="['/atheleteList']">AtheleteList</button>
+    </div>
+      <br />
+      <br />
+      <table class="table" border="0">
+          <thead>
+              <tr>
+                <th>Test Name</th>
+                <th>Coach Name</th>
+                <th>Date</th>
+                <th>Score</th>
+              </tr>
+          </thead>
+          <tbody>
+                  <tr *ngFor="let model of atheleteData">
+                    <td>{{model.testName}}</td>
+                    <td>{{model.coachName}}</td>
+                    <td>{{model.date | date:"dd-MM-yyyy"}}</td>
+                    <td>{{model.data}}</td>
+                  </tr>
+          </tbody>
+      </table>
+  </div>
+</div>

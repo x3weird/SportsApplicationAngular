@@ -1,0 +1,40 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="testForm">
+    <div class="form-signin">
+        <h2 class="form-signin-heading">CREATE NEW TEST</h2>
+        <div class="form-group">
+            <label class="control-label" for="testType">Test Type</label>
+            <select class="form-control" id="testType" formControlName="TestType"
+            [ngClass]="{
+              'is-invalid':
+                    (testForm.get('TestType').touched ||
+                    testForm.get('TestType').dirty) &&
+                    !testForm.get('TestType').valid
+            }">
+                <option value="-1" selected disabled>Choose</option>
+                <option>Cooper Test</option>
+                <option>Sprint Test</option>
+            </select>
+            <span class="invalid-feedback">
+                <span *ngIf="testForm.get('TestType').errors?.required">
+                  Please select Test Type.
+                </span>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" class="form-control" id="date" formControlName="Date"
+        [ngClass]="{
+          'is-invalid':
+                (testForm.get('Date').touched ||
+                testForm.get('Date').dirty) &&
+                !testForm.get('Date').valid
+        }" />
+        <span class="invalid-feedback">
+            <span *ngIf="testForm.get('Date').errors?.required">
+              Please enter Date.
+            </span>
+        </span>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!testForm.valid">Create Test</button>
+</form>
