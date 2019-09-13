@@ -61,8 +61,8 @@ namespace SportsApplication.Controllers
                 UserId = resultmodel.UserId
             };
             resultmodel.AtheleteList = await unitOfWork.Data.GetAllAtheleteList();
-            int status = await unitOfWork.Data.AddResult(result);
-            if(status==0)
+            bool status = await unitOfWork.Data.AddResult(result);
+            if(!status)
             {
                  return Ok(new { status});
             }
@@ -107,8 +107,8 @@ namespace SportsApplication.Controllers
                 UserId = resultmodel.UserId
             };
             
-            int status = await unitOfWork.Data.Update(result);
-            if (status == 0)
+            bool status = await unitOfWork.Data.Update(result);
+            if (!status)
             {
                 ViewBag.message = "Athelete already exists";
                 return Ok(new { status });

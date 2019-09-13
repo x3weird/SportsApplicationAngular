@@ -14,13 +14,13 @@ namespace Sports_Application.Models
         Task<Test> AddTest(Test Test);
         Task<List<AtheleteNameWithData>> GetAtheleteNamesWithDataByTestId(int id);
         Task DeleteTestByTestid(int Id);
-        Task<int> AddResult(Result Result);
+        Task<bool> AddResult(Result Result);
         Task<Test> GetTestByid(int Id);
         Task<List<Athelete>> GetAllAtheleteList();
         Task IncrementCountByTestId(int Id);
         Task DecrementCountByTestId(int Id);
         Task<Result> GetResultById(int Id);
-        Task<int> Update(Result updatedResult);
+        Task<bool> Update(Result updatedResult);
         Task DeleteTestResultById(int Id);
         Task<List<AtheleteViewModel>> GetAtheleteData(string Id);
         Task<ApplicationUser> FindByEmailAsync(string Email);

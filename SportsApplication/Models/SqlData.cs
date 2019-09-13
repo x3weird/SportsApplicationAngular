@@ -116,7 +116,7 @@ namespace Sports_Application.Models
                 }
             }
         }
-        public async Task<int> AddResult(Result result)
+        public async Task<bool> AddResult(Result result)
         {
             //var query = from r in db.Results
             //            where r.TestId.Equals(result.TestId) && r.UserId.Equals(result.UserId)
@@ -127,11 +127,11 @@ namespace Sports_Application.Models
             if (await query.SingleOrDefaultAsync() == null)
             {
                 db.Results.Add(result);
-                return 1;
+                return true;
             }
             else
             {
-                return 0;
+                return false;
             }
 
 
@@ -193,7 +193,7 @@ namespace Sports_Application.Models
             return await query.FirstAsync();
         }
 
-        public async Task<int> Update(Result updatedResult)
+        public async Task<bool> Update(Result updatedResult)
         {
             //var query2 = from r in db.Results
             //            where r.Id != updatedResult.Id && r.TestId.Equals(updatedResult.TestId) && r.UserId.Equals(updatedResult.UserId)
@@ -210,11 +210,11 @@ namespace Sports_Application.Models
                 var query = db.Results.Where(r => r.TestId.Equals(updatedResult.TestId) && r.UserId.Equals(updatedResult.UserId));
                 var entity = db.Results.Attach(updatedResult);
                 entity.State = EntityState.Modified;
-                return 1;
+                return true;
             }
             else
             {
-                return 0;
+                return false;
             }
 
         }
